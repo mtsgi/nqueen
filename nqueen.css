@@ -90,3 +90,15 @@ form a {
     display: none;
     padding-bottom : 25px;
 }
+
+#version{
+    color: #a0a0a0;
+    font-size: 14px;
+}
+
+footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}

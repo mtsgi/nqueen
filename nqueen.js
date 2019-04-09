@@ -2,6 +2,9 @@
 var size;
 //置いたクイーンの個数
 var queen = 0;
+$(document).ready( function(){
+    $("#version").text("v2").on("click", () => alert("N-Queen v2.0 / QueenEngine2") );
+});
 function startQueen() {
     //初期化
     size = $( "#size" ).val();
@@ -9,59 +12,44 @@ function startQueen() {
     $( "#num" ).text( queen );
     $( "#table" ).html( "" );
     $( "#result" ).hide().text( "" );
+    
     //テーブルを生成
-    var append = "";
-    for( var i = 1; i < size * size + 1; i++ ) {
+    var append = "", _row = 1, _col = 1;
+    for( let i = 1; i < size * size + 1; i++ ) {
         if( i % size == 1 ) append += "<tr>";
-        append += "<td id='" + i + "'></td>";
-        if( i % size == 0 ) append += "</tr>";
+        append += "<td id='" + i + "' data-row='"+_row+"' data-col='"+_col+"'></td>";
+        _row ++;
+        if( i % size == 0 ) {
+            append += "</tr>";
+            _col ++; _row = 1;
+        }
     }
     $( "#table" ).append( append );
+
     //ふれると列と行を表示する
     $( "td" ).hover( function() {
-        var row = Math.floor( Number( this.id - 1 ) / size ) + 1;
-        var col = Number( this.id ) % size;
-        if( col == 0 ) col = size;
-        $( "footer" ).text( row + "行目" + col + "列目" );
+        $( "footer" ).text( $(this).attr("data-row") + "行目" + $(this).attr("data-col") + "列目" );
     } );
+
     //マスをクリック
     $( "td" ).click( function() {
-        var masu = Number( this.id );
-        var row = Math.floor( Number( this.id - 1 ) / size ) + 1;
-        var col = Number( this.id ) % size;
+        var row = Number( $(this).attr("data-row") );
+        var col = Number( $(this).attr("data-col") );
         if( col == 0 ) col = size;
         //赤いところには置けない
-        if( $( this ).hasClass( "red" ) ) {
-            alert( "そこには置けないよ！" );
-            return;
-        }
+        if( $( this ).hasClass( "red" ) ) return;
+        
         //クイーンの行動範囲を赤く塗る
-        var redCount = 0;
-        for( i in $( "td" ) ) {
-            var k = ( Number( i ) + 1 );
-            //同じ行を赤くする
-            var k_row = Math.floor( ( k - 1 ) / size ) + 1
-            if( k_row == row ) {
-                $( "#" + k ).addClass( "red" );
-            }
-            //同じ列を赤くする
-            var k_col = k % size
-            if( k_col == 0 ) k_col = size;
-            if( k_col == col ) {
-                $( "#" + k ).addClass( "red" );
-            }
-            //ななめ
-            for( n = 1; n < size; n++ ) {
-                if( k_row == row + n && k_col == col + n ) $( "#" + k ).addClass( "red" );
-                else if( k_row == row + n && k_col == col - n ) $( "#" + k ).addClass( "red" );
-                else if( k_row == row - n && k_col == col + n ) $( "#" + k ).addClass( "red" );
-                else if( k_row == row - n && k_col == col - n ) $( "#" + k ).addClass( "red" );
-            }
-            //赤いマス数カウント
-            if( $( "#" + k ).hasClass( "red" ) ) redCount++;
+        $("[data-row="+row+"]").addClass( "red" );
+        $("[data-col="+col+"]").addClass( "red" );
+        let sr = (row-1 > size-row ? row-1 : size-row ), sc = (col-1 > size-col ? col-1 : size-col), n = sr < sc ? sr : sc ;
+        for( let i=1; i<=n; i++ ){
+            $("[data-row="+(row-i)+"][data-col="+(col-i)+"],[data-row="+(row+i)+"][data-col="+(col+i)+"],[data-row="+(row+i)+"][data-col="+(col-i)+"],[data-row="+(row-i)+"][data-col="+(col+i)+"]").addClass("red");
         }
-        $( this ).addClass( "red" );
-        $( this ).text( "♕" );
+        var redCount = $("[class=red]").length;
+
+        $( this ).addClass("red");
+        $( this ).text("♕");
         queen++;
         $( "#num" ).text( queen );
         if( queen == size ) {
