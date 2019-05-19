@@ -3,7 +3,7 @@ var size;
 //置いたクイーンの個数
 var queen = 0;
 $(document).ready( function(){
-    $("#version").text("v2").on("click", () => alert("N-Queen v2.0 / QueenEngine2") );
+    $("#version").text("v2").on("click", () => alert("N-Queen v2.1 / QueenEngine2") );
 });
 function startQueen() {
     //初期化
@@ -57,7 +57,7 @@ function startQueen() {
         $( "#num" ).text( queen );
         if( queen == size ) {
             $( "#result" ).show().text( size + "クイーンに成功！おめでとうございます！" ).css( "color", "dodgerblue" );
-            $( "#tweet" ).attr( "href", "https://twitter.com/intent/tweet?url=http://j.mp/n-queen&text=" + size + "%E3%82%AF%E3%82%A4%E3%83%BC%E3%83%B3%E3%81%AB%E6%88%90%E5%8A%9F%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F" ).show()
+            $( "#tweet" ).attr( "href", "https://twitter.com/intent/tweet?url=http://j.mp/quee-n&text=" + size + "%E3%82%AF%E3%82%A4%E3%83%BC%E3%83%B3%E3%81%AB%E6%88%90%E5%8A%9F%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F" ).show()
             return;
         }
         if( redCount == size * size ) {
