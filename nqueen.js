@@ -14,7 +14,7 @@ function startQueen() {
     $( "#result" ).hide().text( "" );
     
     //テーブルを生成
-    var append = "", _row = 1, _col = 1;
+    let append = "", _row = 1, _col = 1;
     for( let i = 1; i < size * size + 1; i++ ) {
         if( i % size == 1 ) append += "<tr>";
         append += "<td id='" + i + "' data-row='"+_row+"' data-col='"+_col+"'></td>";
@@ -24,33 +24,36 @@ function startQueen() {
             _col ++; _row = 1;
         }
     }
-    $( "#table" ).append( append );
+    document.getElementById("table").innerHTML = append;
+    //$( "#table" ).append( append );
 
     //ふれると列と行を表示する
     $( "td" ).hover( function() {
-        $( "footer" ).text( $(this).attr("data-row") + "行目" + $(this).attr("data-col") + "列目" );
+        $( "footer" ).text( this.getAttribute("data-row") + "行目" + this.getAttribute("data-col") + "列目" );
     } );
 
     //マスをクリック
-    $( "td" ).click( function() {
-        var row = Number( $(this).attr("data-row") );
-        var col = Number( $(this).attr("data-col") );
+    $("td").on("click", function() {
+        let row = Number( this.getAttribute("data-row") );
+        let col = Number( this.getAttribute("data-col") );
         if( col == 0 ) col = size;
         //赤いところには置けない
-        if( $( this ).hasClass( "red" ) ) return;
+        if( $(this).hasClass( "red" ) ) return;
         
         //クイーンの行動範囲を赤く塗る
-        $("[data-row="+row+"]").addClass( "red" );
-        $("[data-col="+col+"]").addClass( "red" );
+        let target = document.querySelectorAll("[data-row='"+row+"'], [data-col='"+col+"']");
+        target.forEach( (e) => e.classList.add("red") );
+        
         let sr = (row-1 > size-row ? row-1 : size-row ), sc = (col-1 > size-col ? col-1 : size-col), n = sr < sc ? sr : sc ;
         for( let i=1; i<=n; i++ ){
-            $("[data-row="+(row-i)+"][data-col="+(col-i)+"],[data-row="+(row+i)+"][data-col="+(col+i)+"],[data-row="+(row+i)+"][data-col="+(col-i)+"],[data-row="+(row-i)+"][data-col="+(col+i)+"]").addClass("red");
+            target = document.querySelectorAll("[data-row='"+(row-i)+"'][data-col='"+(col-i)+"'],[data-row='"+(row+i)+"'][data-col='"+(col+i)+"'],[data-row='"+(row+i)+"'][data-col='"+(col-i)+"'],[data-row='"+(row-i)+"'][data-col='"+(col+i)+"']");
+            target.forEach( (e) => e.classList.add("red") );
         }
-        var redCount = $("[class=red]").length;
+        let redCount = document.querySelectorAll(".red").length;
 
-        $( this ).addClass("red");
-        $( this ).text("♕");
+        this.innerText = "♕";
         queen++;
+
         $( "#num" ).text( queen );
         if( queen == size ) {
             $( "#result" ).show().text( size + "クイーンに成功！おめでとうございます！" ).css( "color", "dodgerblue" );
