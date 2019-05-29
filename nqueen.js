@@ -3,7 +3,13 @@ var size;
 //置いたクイーンの個数
 var queen = 0;
 $(document).ready( function(){
-    $("#version").text("v2").on("click", () => alert("N-Queen v2.1 / QueenEngine2") );
+    $("#version").text("v2").on("click", () => alert("N-Queen v2.2 / QueenEngine2") );
+    $("#size").on("keydown", function(e){
+        if( e.keyCode == 13 ){
+            e.preventDefault();
+            startQueen();
+        };
+    });
 });
 function startQueen() {
     //初期化
@@ -29,11 +35,11 @@ function startQueen() {
 
     //ふれると列と行を表示する
     $( "td" ).hover( function() {
-        $( "footer" ).text( this.getAttribute("data-row") + "行目" + this.getAttribute("data-col") + "列目" );
+        document.getElementsByTagName("footer")[0].innerHTML = this.getAttribute("data-row") + "行目" + this.getAttribute("data-col") + "列目";
     } );
 
     //マスをクリック
-    $("td").on("click", function() {
+    $("#table").on("click", "td", function() {
         let row = Number( this.getAttribute("data-row") );
         let col = Number( this.getAttribute("data-col") );
         if( col == 0 ) col = size;
